@@ -9,8 +9,7 @@ import Layout from '../../layouts/default';
 import Api from '../../api';
 //import js cookie
 import Cookies from 'js-cookie';
-//import toast
-import toast from 'react-hot-toast';
+import FlashMessage from "../../components/flash-message";
 
 export default function UserEdit() {
 
@@ -86,10 +85,8 @@ export default function UserEdit() {
             }
         })
         .then(response => {
-            toast.success(response.data.message, {
-                position: "top-right",
-                duration: 4000,
-            });
+      
+            FlashMessage("success", response.data.message);
             navigate('/users');
         })
         .catch(error => {

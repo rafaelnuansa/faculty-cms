@@ -15,9 +15,9 @@ import FacultyEdit from '../pages/faculties/edit';
 
 
 import Category from '../pages/categories/index';
-// import CategoryCreate from '../pages/faculties/create';
-// import CategoryEdit from '../pages/faculties/edit';
+import CategoryCreate from '../pages/categories/create';
 import NotFound from '../pages/errors/404';
+import CategoryEdit from '../pages/categories/edit';
 
 // Define route constants
 export const ROUTES = {
@@ -31,6 +31,8 @@ export const ROUTES = {
   FACULTIES_CREATE: '/faculties/create',
   FACULTIES_EDIT: '/faculties/edit/:id',
   CATEGORIES: '/categories',
+  CATEGORIES_CREATE: '/categories/create',
+  CATEGORIES_EDIT: '/categories/edit/:id',
 };
 
 export default function RoutesIndex() {
@@ -45,6 +47,8 @@ export default function RoutesIndex() {
         { path: ROUTES.FACULTIES_CREATE, component: <FacultyCreate /> },
         { path: ROUTES.FACULTIES_EDIT, component: <FacultyEdit /> },
         { path: ROUTES.CATEGORIES, component: <Category /> },
+        { path: ROUTES.CATEGORIES_CREATE, component: <CategoryCreate /> },
+        { path: ROUTES.CATEGORIES_EDIT, component: <CategoryEdit /> },
     ];
 
     return (

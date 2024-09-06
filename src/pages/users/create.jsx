@@ -1,30 +1,28 @@
-//import react  
-import { useState, useEffect } from "react";
+// import react  
+import { useState, useEffect, useCallback } from "react";
 
-//import react router dom
+// import react router dom
 import { Link, useNavigate } from "react-router-dom";
 
-//import layout
+// import layout
 import Layout from '../../layouts/default';
 
-//import api
+// import api
 import Api from '../../api';
 
-//import js cookie
+// import js cookie
 import Cookies from 'js-cookie';
-
-//import toast
-import toast from 'react-hot-toast';
+import FlashMessage from "../../components/flash-message";
 
 export default function UserCreate() {
 
-    //title page
+    // title page
     document.title = "Create User";
 
-    //navigata
+    // navigate
     const navigate = useNavigate();
 
-    //define state for form
+    // define state for form
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -32,76 +30,75 @@ export default function UserCreate() {
     const [facultyId, setFacultyId] = useState(''); // for faculty selection
     const [errors, setErrors] = useState([]);
 
-    //define state for faculties
+    // define state for faculties
     const [faculties, setFaculties] = useState([]);
 
-    //token from cookies
+    // token from cookies
     const token = Cookies.get('token');
 
-    //function "storeUser"
+    // function "storeUser"
     const storeUser = async (e) => {
         e.preventDefault();
 
-        //sending data
+        // sending data
         await Api.post('/api/admin/users', {
-            //data
+            // data
             name: name,
             email: email,
             password: password,
             password_confirmation: passwordConfirmation,
             faculty_id: facultyId, // Include faculty_id
         }, {
-            //header
+            // header
             headers: {
-                //header Bearer + Token
+                // header Bearer + Token
                 Authorization: `Bearer ${token}`,
             }
         })
         .then(response => {
+            // show toast
+            FlashMessage('success', response.data.message);
 
-            //show toast
-            toast.success(response.data.message, {
-                position: "top-right",
-                duration: 4000,
-            });
-
-            //redirect
+            // redirect
             navigate('/users');
-
         })
         .catch(error => {
-
-            //set error message to state "errors"
+            // set error message to state "errors"
             setErrors(error.response.data);
         })
     }
 
-    //fetch faculties
-    const fetchDataFaculty = async () => {
+    // fetch faculties
+    const fetchDataFaculty = useCallback(async () => {
         await Api.get('/api/admin/faculties/all', {
-            //header
+            // header
             headers: {
-                //header Bearer + Token
+                // header Bearer + Token
                 Authorization: `Bearer ${token}`,
             }
         })
         .then(response => {
-            //set response data to state "faculties"
+            // set response data to state "faculties"
             setFaculties(response.data.data);
+        })
+        .catch(error => {
+            console.error("Failed to fetch faculties:", error);
         });
-    }
+    }, [token]);
 
-    //useEffect to fetch faculties on component load
+    // useEffect to fetch faculties on component load
     useEffect(() => {
         fetchDataFaculty();
-    }, []);
+    }, [fetchDataFaculty]); // Include fetchDataFaculty in the dependency array
 
     return (
         <Layout>
             <div className="container-fluid mb-5 mt-5">
                 <div className="row">
                     <div className="col-md-12">
-                        <Link to="/users" className="btn btn-md btn-tertiary border-0 shadow mb-3" type="button"><i className="fa fa-long-arrow-alt-left me-2"></i> Back</Link>
+                        <Link to="/users" className="btn btn-md btn-tertiary border-0 shadow mb-3" type="button">
+                            <i className="fa fa-long-arrow-alt-left me-2"></i> Back
+                        </Link>
                         <div className="card border-0 shadow">
                             <div className="card-body">
                                 <h6><i className="fa fa-user"></i> Create User</h6>
@@ -111,7 +108,13 @@ export default function UserCreate() {
                                         <div className="col-md-6">
                                             <div className="mb-3">
                                                 <label className="form-label fw-bold">Full Name</label>
-                                                <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter Full Name"/>
+                                                <input 
+                                                    type="text" 
+                                                    className="form-control" 
+                                                    value={name} 
+                                                    onChange={(e) => setName(e.target.value)} 
+                                                    placeholder="Enter Full Name"
+                                                />
                                             </div>
                                             {errors.name && (
                                                 <div className="alert alert-danger">
@@ -122,7 +125,13 @@ export default function UserCreate() {
                                         <div className="col-md-6">
                                             <div className="mb-3">
                                                 <label className="form-label fw-bold">Email Address</label>
-                                                <input type="text" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter Email Address"/>
+                                                <input 
+                                                    type="text" 
+                                                    className="form-control" 
+                                                    value={email} 
+                                                    onChange={(e) => setEmail(e.target.value)} 
+                                                    placeholder="Enter Email Address"
+                                                />
                                             </div>
                                             {errors.email && (
                                                 <div className="alert alert-danger">
@@ -136,7 +145,13 @@ export default function UserCreate() {
                                         <div className="col-md-6">
                                             <div className="mb-3">
                                                 <label className="form-label fw-bold">Password</label>
-                                                <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter Password"/>
+                                                <input 
+                                                    type="password" 
+                                                    className="form-control" 
+                                                    value={password} 
+                                                    onChange={(e) => setPassword(e.target.value)} 
+                                                    placeholder="Enter Password"
+                                                />
                                             </div>
                                             {errors.password && (
                                                 <div className="alert alert-danger">
@@ -147,7 +162,13 @@ export default function UserCreate() {
                                         <div className="col-md-6">
                                             <div className="mb-3">
                                                 <label className="form-label fw-bold">Password Confirmation</label>
-                                                <input type="password" className="form-control" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} placeholder="Enter Password Confirmation"/>
+                                                <input 
+                                                    type="password" 
+                                                    className="form-control" 
+                                                    value={passwordConfirmation} 
+                                                    onChange={(e) => setPasswordConfirmation(e.target.value)} 
+                                                    placeholder="Enter Password Confirmation"
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -156,7 +177,11 @@ export default function UserCreate() {
                                         <div className="col-md-6">
                                             <div className="mb-3">
                                                 <label className="form-label fw-bold">Faculty</label>
-                                                <select className="form-control" value={facultyId} onChange={(e) => setFacultyId(e.target.value)}>
+                                                <select 
+                                                    className="form-control" 
+                                                    value={facultyId} 
+                                                    onChange={(e) => setFacultyId(e.target.value)}
+                                                >
                                                     <option value="">Select Faculty</option>
                                                     {faculties.map(faculty => (
                                                         <option key={faculty.id} value={faculty.id}>
@@ -174,8 +199,12 @@ export default function UserCreate() {
                                     </div>
 
                                     <div>
-                                        <button type="submit" className="btn btn-md btn-tertiary me-2"><i className="fa fa-save"></i> Save</button>
-                                        <button type="reset" className="btn btn-md btn-warning"><i className="fa fa-redo"></i> Reset</button>
+                                        <button type="submit" className="btn btn-md btn-tertiary me-2">
+                                            <i className="fa fa-save"></i> Save
+                                        </button>
+                                        <button type="reset" className="btn btn-md btn-warning">
+                                            <i className="fa fa-redo"></i> Reset
+                                        </button>
                                     </div>
                                 </form>
                             </div>
