@@ -3,16 +3,12 @@ import { useState, useEffect } from "react";
 
 //import react router dom
 import { Link, useNavigate, useParams } from "react-router-dom";
-
 //import layout
 import Layout from '../../layouts/default';
-
 //import api
 import Api from '../../api';
-
 //import js cookie
 import Cookies from 'js-cookie';
-
 //import toast
 import toast from 'react-hot-toast';
 
@@ -32,42 +28,46 @@ export default function UserEdit() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
-    const [rolesData, setRolesData] = useState([]);
-    const [errors, setErros] = useState([]);
-
+    const [facultyId, setFacultyId] = useState(''); // Initialize with empty string
+    const [faculties, setFaculties] = useState([]); // Added faculties state
+    const [errors, setErrors] = useState([]); // Corrected state name
 
     //token from cookies
     const token = Cookies.get('token');
 
-
     //function "fetchDataUser"
     const fetchDataUser = async () => {
-
         await Api.get(`/api/admin/users/${id}`, {
-
-            //header
             headers: {
-                //header Bearer + Token
                 Authorization: `Bearer ${token}`,
             }
         })
         .then(response => {
-
+            const userData = response.data.data;
             //set response data to state
-            setName(response.data.data.name);
-            setEmail(response.data.data.email);
-            setRolesData(response.data.data.roles.map(obj => obj.name));
+            setName(userData.name);
+            setEmail(userData.email);
+            setFacultyId(userData.faculty_id || ''); // Handle case if faculty_id is null
         });
+    }
 
+    //fetch faculties
+    const fetchDataFaculty = async () => {
+        await Api.get('/api/admin/faculties/all', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        })
+        .then(response => {
+            setFaculties(response.data.data); // Set faculties data
+        });
     }
 
     //useEffect
     useEffect(() => {
-
-        //call function "fetchDataUser"
         fetchDataUser();
+        fetchDataFaculty(); // Fetch faculties when component loads
     }, []);
-
 
     //function "updateUser"
     const updateUser = async (e) => {
@@ -75,37 +75,25 @@ export default function UserEdit() {
 
         //sending data
         await Api.put(`/api/admin/users/${id}`, {
-
-            //data
             name: name,
             email: email,
             password: password,
             password_confirmation: passwordConfirmation,
-            roles: rolesData
+            faculty_id: facultyId || '', // Ensure faculty_id is an empty string if not set
         }, {
-
-            //header
             headers: {
-                //header Bearer + Token
                 Authorization: `Bearer ${token}`,
             }
         })
         .then(response => {
-
-            //show toast
             toast.success(response.data.message, {
                 position: "top-right",
                 duration: 4000,
             });
-
-            //redirect
             navigate('/users');
-
         })
         .catch(error => {
-
-            //set error message to state "errors"
-            setErros(error.response.data);
+            setErrors(error.response.data);
         })
     }
 
@@ -164,6 +152,28 @@ export default function UserEdit() {
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <div className="mb-3">
+                                                <label className="form-label fw-bold">Faculty</label>
+                                                <select className="form-control" value={facultyId} onChange={(e) => setFacultyId(e.target.value)}>
+                                                    <option value="">Select Faculty</option>
+                                                    {faculties.map(faculty => (
+                                                        <option key={faculty.id} value={faculty.id}>
+                                                            {faculty.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            {errors.faculty_id && (
+                                                <div className="alert alert-danger">
+                                                    {errors.faculty_id[0]}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
                                     <div>
                                         <button type="submit" className="btn btn-md btn-tertiary me-2"><i className="fa fa-save"></i> Update</button>
                                         <button type="reset" className="btn btn-md btn-warning"><i className="fa fa-redo"></i> Reset</button>
@@ -176,5 +186,4 @@ export default function UserEdit() {
             </div>
         </Layout>
     )
-
 }

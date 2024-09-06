@@ -12,6 +12,11 @@ import UserEdit from '../pages/users/edit';
 import Faculties from '../pages/faculties/index';
 import FacultyCreate from '../pages/faculties/create';
 import FacultyEdit from '../pages/faculties/edit';
+
+
+import Category from '../pages/categories/index';
+// import CategoryCreate from '../pages/faculties/create';
+// import CategoryEdit from '../pages/faculties/edit';
 import NotFound from '../pages/errors/404';
 
 // Define route constants
@@ -25,6 +30,7 @@ export const ROUTES = {
   FACULTIES: '/faculties',
   FACULTIES_CREATE: '/faculties/create',
   FACULTIES_EDIT: '/faculties/edit/:id',
+  CATEGORIES: '/categories',
 };
 
 export default function RoutesIndex() {
@@ -38,6 +44,7 @@ export default function RoutesIndex() {
         { path: ROUTES.FACULTIES, component: <Faculties /> },
         { path: ROUTES.FACULTIES_CREATE, component: <FacultyCreate /> },
         { path: ROUTES.FACULTIES_EDIT, component: <FacultyEdit /> },
+        { path: ROUTES.CATEGORIES, component: <Category /> },
     ];
 
     return (

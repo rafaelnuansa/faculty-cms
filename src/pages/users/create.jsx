@@ -1,5 +1,5 @@
 //import react  
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 //import react router dom
 import { Link, useNavigate } from "react-router-dom";
@@ -29,9 +29,11 @@ export default function UserCreate() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
-    const [errors, setErros] = useState([]);
+    const [facultyId, setFacultyId] = useState(''); // for faculty selection
+    const [errors, setErrors] = useState([]);
 
-    //define state "roles"
+    //define state for faculties
+    const [faculties, setFaculties] = useState([]);
 
     //token from cookies
     const token = Cookies.get('token');
@@ -42,14 +44,13 @@ export default function UserCreate() {
 
         //sending data
         await Api.post('/api/admin/users', {
-
             //data
             name: name,
             email: email,
             password: password,
             password_confirmation: passwordConfirmation,
+            faculty_id: facultyId, // Include faculty_id
         }, {
-
             //header
             headers: {
                 //header Bearer + Token
@@ -71,9 +72,29 @@ export default function UserCreate() {
         .catch(error => {
 
             //set error message to state "errors"
-            setErros(error.response.data);
+            setErrors(error.response.data);
         })
     }
+
+    //fetch faculties
+    const fetchDataFaculty = async () => {
+        await Api.get('/api/admin/faculties/all', {
+            //header
+            headers: {
+                //header Bearer + Token
+                Authorization: `Bearer ${token}`,
+            }
+        })
+        .then(response => {
+            //set response data to state "faculties"
+            setFaculties(response.data.data);
+        });
+    }
+
+    //useEffect to fetch faculties on component load
+    useEffect(() => {
+        fetchDataFaculty();
+    }, []);
 
     return (
         <Layout>
@@ -130,6 +151,28 @@ export default function UserCreate() {
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <div className="mb-3">
+                                                <label className="form-label fw-bold">Faculty</label>
+                                                <select className="form-control" value={facultyId} onChange={(e) => setFacultyId(e.target.value)}>
+                                                    <option value="">Select Faculty</option>
+                                                    {faculties.map(faculty => (
+                                                        <option key={faculty.id} value={faculty.id}>
+                                                            {faculty.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            {errors.faculty_id && (
+                                                <div className="alert alert-danger">
+                                                    {errors.faculty_id[0]}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
                                     <div>
                                         <button type="submit" className="btn btn-md btn-tertiary me-2"><i className="fa fa-save"></i> Save</button>
                                         <button type="reset" className="btn btn-md btn-warning"><i className="fa fa-redo"></i> Reset</button>
@@ -142,5 +185,4 @@ export default function UserCreate() {
             </div>
         </Layout>
     )
-
 }

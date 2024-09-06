@@ -70,10 +70,8 @@ export default function Dashboard() {
 
     //useEffect
     useEffect(() => {
-
         //call method "fetchData"
         fetchData();
-
     }, []);
 
 
