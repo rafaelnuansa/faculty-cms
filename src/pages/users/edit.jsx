@@ -19,7 +19,7 @@ import toast from 'react-hot-toast';
 export default function UserEdit() {
 
     //title page
-    document.title = "Edit User - NewsApp Administartor";
+    document.title = "Edit User";
 
     //navigata
     const navigate = useNavigate();

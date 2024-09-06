@@ -39,7 +39,7 @@ ChartJS.register(
 export default function Dashboard() {
 
     //title page
-    document.title = "Dashboard - NewsApp Administartor";
+    document.title = "Dashboard";
 
     //define state
     const[countCategories, setCountCategories] = useState(0);

@@ -18,7 +18,7 @@ import toast from 'react-hot-toast';
 
 export default function FacultyEdit() {
     // Title page
-    document.title = "Edit Faculty - NewsApp Administrator";
+    document.title = "Edit Faculty";
 
     // Navigate
     const navigate = useNavigate();
