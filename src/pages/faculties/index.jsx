@@ -25,8 +25,8 @@ export default function UsersIndex() {
 
     // define state "pagination"
     const [pagination, setPagination] = useState({
-        currentPage: 0,
-        perPage: 0,
+        currentPage: 1,  // Start from page 1
+        perPage: 10,
         total: 0
     });
 
@@ -38,10 +38,8 @@ export default function UsersIndex() {
 
     // function fetchData
     const fetchData = useCallback(async (pageNumber = 1, keywords = '') => {
-        const page = pageNumber || pagination.currentPage;
         try {
-            const response = await Api.get(`/api/admin/faculties?search=${keywords}&page=${page}`, {
-                // header
+            const response = await Api.get(`/api/admin/faculties?search=${keywords}&page=${pageNumber}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
@@ -55,13 +53,13 @@ export default function UsersIndex() {
         } catch (error) {
             console.error("Failed to fetch data:", error);
         }
-    }, [pagination.currentPage, token]);
+    }, [token]);
 
     // function searchData
-    const searchData = useCallback(async (e) => {
+    const searchData = useCallback((e) => {
         const newKeywords = e.target.value;
         setKeywords(newKeywords);
-        fetchData(1, newKeywords);
+        fetchData(1, newKeywords);  // Reset to first page on search
     }, [fetchData]);
 
     // useEffect
@@ -76,7 +74,7 @@ export default function UsersIndex() {
                     <div className="col-md-8">
                         <div className="row">
                             <div className="col-md-3 col-12 mb-2">
-                                <Link to="/faculties/create" className="btn btn-md btn-tertiary border-0 shadow w-100" type="button">
+                                <Link to="/faculties/create" className="btn btn-tertiary border-0 shadow w-100" type="button">
                                     <i className="fa fa-plus-circle"></i> Add New
                                 </Link>
                             </div>
@@ -154,5 +152,5 @@ export default function UsersIndex() {
                 </div>
             </div>
         </Layout>
-    )
+    );
 }

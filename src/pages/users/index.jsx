@@ -120,7 +120,7 @@ export default function UsersIndex() {
               <div className="col-md-3 col-12 mb-2">
                 <Link
                   to="/users/create"
-                  className="btn btn-md btn-tertiary border-0 shadow w-100"
+                  className="btn btn-tertiary border-0 shadow w-100"
                   type="button"
                 >
                   <i className="fa fa-plus-circle"></i> Add New
