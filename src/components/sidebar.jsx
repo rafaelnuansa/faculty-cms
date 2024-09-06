@@ -106,48 +106,33 @@ export default function Sidebar() {
                                 </Link>
                             </li>
 
-                        <li role="separator" className="dropdown-divider mt-4 mb-3 border-gray-700"></li>
 
-                           <li className={
-                                    'nav-item ' + (
-                                        activeRoute[1] === 'roles' ? ' active' : 
-                                        activeRoute[1] === 'users' ? ' active' : ''
-                                    )
-                                }>
-                                <span className="nav-link d-flex justify-content-between align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#submenu-app" aria-expanded="false">
+                            <li className={activeRoute[1] === "faculties" ? "nav-item mt-2 active" : "nav-item mt-2"}>
+                                <Link to="/faculties" className="nav-link d-flex justify-content-between">
                                     <span>
                                         <span className="sidebar-icon">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="bi bi-people" viewBox="0 0 16 16">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="bi bi-image-fill" viewBox="0 0 16 16">
+                                                <path d="M.002 3a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-12a2 2 0 0 1-2-2V3zm1 9v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12zm5-6.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z" />
+                                            </svg>
+                                        </span>
+                                        <span className="sidebar-text">Fakultas</span>
+                                    </span>
+                                </Link>
+                            </li>
+
+                            <li className={activeRoute[1] === "users" ? "nav-item mt-2 active" : "nav-item mt-2"}>
+                                <Link to="/users" className="nav-link d-flex justify-content-between">
+                                    <span>
+                                        <span className="sidebar-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="bi bi-people" viewBox="0 0 16 16">
                                                 <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8Zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022ZM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816ZM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0Zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
                                             </svg>
                                         </span>
                                         <span className="sidebar-text">Users Management</span>
                                     </span>
-                                    <span className="link-arrow">
-                                        <svg className="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path>
-                                        </svg>
-                                    </span>
-                                </span>
-                                <div role="list" id="submenu-app" aria-expanded="false" className={
-                                    'multi-level collapse ' + (
-                                        activeRoute[1] === 'roles' ? ' show' : 
-                                        activeRoute[1] === 'users' ? ' show' : ''
-                                    )
-                                }>
-                                    <ul className="flex-column nav">
-
-                                     
-                                        
-
-                                            <li className={activeRoute[1] === "users" ? "nav-item active" : "nav-item"}>
-                                                <Link to="/users" className="nav-link" href="#">
-                                                    <span className="sidebar-text">Users</span>
-                                                </Link>
-                                            </li>
-                                    </ul>
-                                </div>
+                                </Link>
                             </li>
+                          
 
                     </ul>
                 </div>

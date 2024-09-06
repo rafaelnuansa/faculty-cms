@@ -1,46 +1,32 @@
-//import useState and useEffect
+// src/pages/users/index.jsx
+
 import { useState, useEffect } from "react";
-
-//import Link from react router dom
 import { Link } from "react-router-dom";
-
-//import js cookie
 import Cookies from "js-cookie";
-
-//import layout
 import Layout from "../../layouts/default";
-
-//import pagination component
 import Pagination from "../../components/pagination";
-
-//import redux hooks
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../../redux/users";
+import { ROUTES } from "../../routes/index"; // Import ROUTES
 
 export default function UsersIndex() {
-  // Set the page title
   document.title = "Users";
 
-  // Initialize Redux hooks
   const dispatch = useDispatch();
   const { users, pagination, status, error } = useSelector((state) => state.users);
 
-  // State for search keywords
   const [keywords, setKeywords] = useState('');
   const token = Cookies.get('token');
 
-  // Fetch data when component mounts or keywords change
   useEffect(() => {
     dispatch(fetchUsers({ pageNumber: 1, keywords, token }));
   }, [dispatch, keywords, token]);
 
-  // Handle search input change
   const searchData = (e) => {
     setKeywords(e.target.value);
     dispatch(fetchUsers({ pageNumber: 1, keywords: e.target.value, token }));
   };
 
-  // Handle pagination change
   const handlePageChange = (pageNumber) => {
     dispatch(fetchUsers({ pageNumber, keywords, token }));
   };
@@ -53,8 +39,8 @@ export default function UsersIndex() {
             <div className="row">
               <div className="col-md-3 col-12 mb-2">
                 <Link
-                  to="/users/create"
-                  className="btn btn-md btn-tertiary border-0 shadow w-100"
+                  to={ROUTES.USER_CREATE}
+                  className="btn btn-tertiary border-0 shadow w-100"
                   type="button"
                 >
                   <i className="fa fa-plus-circle"></i> Add New
@@ -81,7 +67,7 @@ export default function UsersIndex() {
             <div className="card border-0 shadow">
               <div className="card-body p-0">
                 <div className="table-responsive">
-                  <table className="table table-striped mb-0 rounded">
+                  <table className="table mb-0 rounded">
                     <thead className="thead-dark">
                       <tr>
                         <th style={{ width: "5%" }}>No.</th>
@@ -92,7 +78,18 @@ export default function UsersIndex() {
                       </tr>
                     </thead>
                     <tbody>
-                      {status === 'loading' && <tr><td colSpan={5}>Loading...</td></tr>}
+                      {status === 'loading' && 
+                       <tr>
+                       <td colSpan={5}>
+                         <div
+                           className="alert alert-danger border-0 text-center rounded shadow-sm w-100"
+                           role="alert"
+                         >
+                           Loading...
+                         </div>
+                       </td>
+                     </tr>
+                      }
                       {status === 'succeeded' && users.length > 0 ? (
                         users.map((user, index) => (
                           <tr key={user.id}>
@@ -104,7 +101,7 @@ export default function UsersIndex() {
                             <td>{user.faculty?.name ?? "-"}</td>
                             <td className="text-center">
                               <Link
-                                to={`/users/edit/${user.id}`}
+                                to={`${ROUTES.USER_EDIT.replace(':id', user.id)}`}
                                 className="btn btn-primary btn-sm me-2"
                               >
                                 <i className="fa fa-pencil-alt"></i>
@@ -122,7 +119,7 @@ export default function UsersIndex() {
                         <tr>
                           <td colSpan={5}>
                             <div
-                              className="alert alert-danger border-0 rounded shadow-sm w-100"
+                              className="alert alert-danger border-0 text-center rounded shadow-sm w-100"
                               role="alert"
                             >
                               Data Belum Tersedia!

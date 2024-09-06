@@ -11,7 +11,7 @@ function privateRoutes({ children }) {
 
     //if token not set
     if (!token) {
-        return <Navigate to="/" replace />;
+        return <Navigate to="/login" replace />;
     }
 
     return children;

@@ -1,34 +1,50 @@
-// import react
-import { lazy, Suspense } from 'react';
+// src/routes/RoutesIndex.jsx
 
-// import react router dom
-import { Routes, Route } from "react-router-dom";
+import { Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import PrivateRoutes from './private';
+import Loader from '../components/loader';
+import Login from '../pages/auth/login';
+import Dashboard from '../pages/dashboard/index';
+import Users from '../pages/users/index';
+import UserCreate from '../pages/users/create';
+import UserEdit from '../pages/users/edit';
+import Faculties from '../pages/faculties/index';
+import FacultyCreate from '../pages/faculties/create';
+import FacultyEdit from '../pages/faculties/edit';
+import NotFound from '../pages/errors/404';
 
-// lazy load components
-const Loader = lazy(() => import('../components/loader'));
-const Login = lazy(() => import('../pages/auth/login'));
-const Dashboard = lazy(() => import('../pages/dashboard/index'));
-const Users = lazy(() => import('../pages/users/index'));
-const UserCreate = lazy(() => import('../pages/users/create'));
-const UserEdit = lazy(() => import('../pages/users/edit'));
-
-import PrivateRoutes from "./private";
+// Define route constants
+export const ROUTES = {
+  LOGIN: '/login',
+  HOME: '/',
+  DASHBOARD: '/dashboard',
+  USERS: '/users',
+  USER_CREATE: '/users/create',
+  USER_EDIT: '/users/edit/:id',
+  FACULTIES: '/faculties',
+  FACULTIES_CREATE: '/faculties/create',
+  FACULTIES_EDIT: '/faculties/edit/:id',
+};
 
 export default function RoutesIndex() {
-    // Array untuk route dengan PrivateRoutes
+    // Array for routes with PrivateRoutes
     const privateRoutes = [
-        { path: "/dashboard", component: <Dashboard /> },
-        { path: "/users", component: <Users /> },
-        { path: "/users/create", component: <UserCreate /> },
-        { path: "/users/edit/:id", component: <UserEdit /> },
+        { path: ROUTES.HOME, component: <Dashboard /> },
+        { path: ROUTES.DASHBOARD, component: <Dashboard /> },
+        { path: ROUTES.USERS, component: <Users /> },
+        { path: ROUTES.USER_CREATE, component: <UserCreate /> },
+        { path: ROUTES.USER_EDIT, component: <UserEdit /> },
+        { path: ROUTES.FACULTIES, component: <Faculties /> },
+        { path: ROUTES.FACULTIES_CREATE, component: <FacultyCreate /> },
+        { path: ROUTES.FACULTIES_EDIT, component: <FacultyEdit /> },
     ];
 
     return (
         <Suspense fallback={<Loader />}>
             <Routes>
                 {/* Public Routes */}
-                <Route path="/" element={<Login />} />
-                {/* Private Routes */}
+                <Route path={ROUTES.LOGIN} element={<Login />} />
                 {privateRoutes.map(({ path, component }) => (
                     <Route
                         key={path}
@@ -36,6 +52,8 @@ export default function RoutesIndex() {
                         element={<PrivateRoutes>{component}</PrivateRoutes>}
                     />
                 ))}
+                {/* Catch-All Route for 404 */}
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </Suspense>
     );

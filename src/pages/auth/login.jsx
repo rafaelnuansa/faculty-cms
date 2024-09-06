@@ -62,12 +62,20 @@ export default function Login() {
     }
 
     return (
-        <div className="login-page bg-light">
+        <div className="login-page bg-light" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+   
             <div className="container">
                 <div className="row">
-                    <div className="col-lg-10 offset-lg-1" style={{ marginTop: '120px' }}>
+                    <div className="col-lg-10 offset-lg-1" >
                         <div className="bg-white shadow rounded">
                             <div className="row">
+                            <div className="col-md-5  d-md-block">
+                                    <div className="form-right h-100 bg-tertiary text-white text-center pt-5">
+                                        <img src="/assets/images/logo.png" width="150" className="mb-3" />
+                                        <h5 className="fs-3">Faculty CMS</h5>
+                                        <p>Content Management System of Faculty</p>
+                                    </div>
+                                </div>
                                 <div className="col-md-7 pe-0">
                                     <div className="form-left h-100 py-5 px-5">
                                         {errors.message && (
@@ -115,13 +123,7 @@ export default function Login() {
                                         </form>
                                     </div>
                                 </div>
-                                <div className="col-md-5 ps-0 d-none d-md-block">
-                                    <div className="form-right h-100 bg-tertiary text-white text-center pt-5">
-                                        <img src="/assets/images/logo.png" width="150" className="mb-3" />
-                                        <h5 className="fs-3">Faculty CMS</h5>
-                                        <p>Content Management System of Faculty</p>
-                                    </div>
-                                </div>
+                              
                             </div>
                         </div>
                     </div>
